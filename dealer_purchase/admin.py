@@ -5,7 +5,7 @@ from .models import ModelCar, Manufacturer, Dealer
 
 
 @admin.register(Dealer)
-class DriverAdmin(UserAdmin):
+class DealerAdmin(UserAdmin):
     list_display = UserAdmin.list_display + ("license_number",)
     fieldsets = UserAdmin.fieldsets + (
         (("Additional info", {"fields": ("license_number",)}),)
@@ -27,7 +27,7 @@ class DriverAdmin(UserAdmin):
 
 
 @admin.register(ModelCar)
-class CarAdmin(admin.ModelAdmin):
+class ModelCarAdmin(admin.ModelAdmin):
     search_fields = ("model__car",)
     list_filter = ("manufacturer",)
 

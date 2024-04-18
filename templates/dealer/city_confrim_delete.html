@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>
+    Manufacturer List
+    <a href="{% url 'taxi:city-create' %}" class="btn btn-primary link-to-page">
+      Create
+    </a>
+  </h1>
+  {% include "search.html" %}
+  {% if city_list %}
+    <table class="table">
+      <tr>
+        <th>Country</th>
+        <th>City</th>
+      </tr>
+
+      {% for city in city_list %}
+        <tr>
+          <td>
+              {{ city.id }}
+          </td>
+          <td>
+              {{ city.name }}
+          </td>
+          <td>
+              {{ city.country }}
+          </td>
+          <td>
+              <a href="{% url 'dealer_purchase:city-update' pk=city.id %}">
+                Update
+              </a>
+            </td>
+            <td>
+              <a style="color: red"
+                href="{% url 'dealer_purchase:city-delete' pk=city.id %}">
+                Delete
+              </a>
+            </td>
+        </tr>
+      {% endfor %}
+    </table>
+
+  {% else %}
+      <p>There are no cities in the service.</p>
+  {% endif %}
+{% endblock %}

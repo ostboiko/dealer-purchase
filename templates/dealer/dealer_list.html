@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+    <h1>
+      Driver List
+      <a href="{% url 'dealer_purchase:driver-create' %}" class="btn btn-primary link-to-page">
+        Create
+      </a>
+    </h1>
+  {% include "search.html" %}
+    {% if delaer_list %}
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>License number</th>
+      </tr>
+    {% for dealer in dealer_list %}
+      <tr>
+        <td>{{ driver.id }}</td>
+        <td><a href="{{ driver.get_absolute_url }}">{{ dealer.username }} {% if user == dealer %} (Me){% endif %}</a></td>
+        <td>{{ dealer.first_name }}</td>
+        <td>{{ dealer.last_name }}</td>
+        <td>{{ dealer.license_number }}</td>
+      </tr>
+    {% endfor %}
+
+    </table>
+    {% else %}
+      <p>There are no dealer in the service.</p>
+    {% endif %}
+{% endblock %}

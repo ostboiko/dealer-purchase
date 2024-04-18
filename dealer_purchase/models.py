@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.urls import reverse
 
@@ -6,8 +6,11 @@ from django.urls import reverse
 class Dealer(AbstractUser):
     name = models.CharField(unique=True, max_length=255)
     license_number = models.CharField(max_length=255, unique=True)
+    user_permissions = models.ManyToManyField(Permission, related_name='dealer_user_permissions')
+    groups = models.ManyToManyField(Group, related_name='dealer_groups')
 
     class Meta:
+        app_label = 'dealer_purchase'
         verbose_name = "dealer"
         verbose_name_plural = "dealers"
 

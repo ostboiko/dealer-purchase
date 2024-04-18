@@ -30,13 +30,13 @@ def index(request):
         "num_visits": num_visits + 1,
     }
 
-    return render(request, "dealer_purchase/index.html", context=context)
+    return render(request, "dealer/index.html", context=context)
 
 
 class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     model = Manufacturer
     context_object_name = "manufacturer_list"
-    template_name = "dealer_purchase/manufacturer_list.html"
+    template_name = "dealer/manufacturer_list.html"
     paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -74,7 +74,7 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:manufacturer-list")
 
 
-class CarListView(LoginRequiredMixin, generic.ListView):
+class ModelCarListView(LoginRequiredMixin, generic.ListView):
     model = ModelCar
     paginate_by = 5
     queryset = ModelCar.objects.select_related("manufacturer")
@@ -104,18 +104,18 @@ class ModelCarDetailView(LoginRequiredMixin, generic.DetailView):
 class ModelCarCreateView(LoginRequiredMixin, generic.CreateView):
     model = ModelCar
     form_class = ModelCarForm
-    success_url = reverse_lazy("dealer_purchase:car-list")
+    success_url = reverse_lazy("dealer:car-list")
 
 
 class ModelCarUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = ModelCar
     form_class = ModelCarForm
-    success_url = reverse_lazy("dealer_purchase:car-list")
+    success_url = reverse_lazy("dealer:car-list")
 
 
 class ModelCarDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = ModelCar
-    success_url = reverse_lazy("dealer_purchase:car-list")
+    success_url = reverse_lazy("dealer:car-list")
 
 
 class DealerListView(LoginRequiredMixin, generic.ListView):
@@ -141,12 +141,12 @@ class DealerListView(LoginRequiredMixin, generic.ListView):
         return queryset
 
 
-class DriverDetailView(LoginRequiredMixin, generic.DetailView):
+class DealerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Dealer
     queryset = Dealer.objects.all().prefetch_related("cars__manufacturer")
 
 
-class DriverCreateView(LoginRequiredMixin, generic.CreateView):
+class DealerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Dealer
     form_class = DealerCreationForm
 
@@ -154,21 +154,21 @@ class DriverCreateView(LoginRequiredMixin, generic.CreateView):
 class DealerLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Dealer
     form_class = DealerLicenseUpdateForm
-    success_url = reverse_lazy("dealer_purchase:driver-list")
+    success_url = reverse_lazy("dealer:driver-list")
 
 
-class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
+class DealerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Dealer
     success_url = reverse_lazy("")
 
 
 @login_required
 def toggle_assign_to_car(request, pk):
-    driver = Dealer.objects.get(id=request.user.id)
+    dealer = Dealer.objects.get(id=request.user.id)
     if (
-        ModelCar.objects.get(id=pk) in driver.cars.all()
-    ):  # probably could check if car exists
-        driver.cars.remove(pk)
+        ModelCar.objects.get(id=pk) in dealer.cars.all()
+    ):
+        dealer.cars.remove(pk)
     else:
-        driver.cars.add(pk)
-    return HttpResponseRedirect(reverse_lazy("dealer_purchase:car-detail", args=[pk]))
+        dealer.cars.add(pk)
+    return HttpResponseRedirect(reverse_lazy("dealer:car-detail", args=[pk]))
