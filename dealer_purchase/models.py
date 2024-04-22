@@ -18,7 +18,7 @@ class Dealer(AbstractUser):
         return f"{self.username} ({self.first_name} {self.last_name})"
 
     def get_absolute_url(self):
-        return reverse("taxi:dealer-detail", kwargs={"pk": self.pk})
+        return reverse("dealer_purchase:dealer-detail", kwargs={"pk": self.pk})
 
 
 class Manufacturer(models.Model):
@@ -32,7 +32,7 @@ class Manufacturer(models.Model):
         return f"{self.name} {self.country}"
 
 
-class ModelCar(models.Model):
+class Car(models.Model):
     car = models.CharField(max_length=255)
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
 

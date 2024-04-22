@@ -5,9 +5,9 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from dealer_purchase.forms import ManufacturerSearchForm, ModelCarSearchForm, ModelCarForm, DealerSearchForm, \
-    DealerCreationForm, DealerLicenseUpdateForm
-from dealer_purchase.models import Dealer, ModelCar, Manufacturer, City
+from dealer_purchase.forms import ManufacturerSearchForm, CarSearchForm, CarForm, DealerSearchForm, \
+    DealerCreationForm, DealerLicenseUpdateForm, CitySearchForm, CarForm
+from dealer_purchase.models import Dealer, Car, Manufacturer, City, Car
 
 
 @login_required
@@ -15,7 +15,7 @@ def index(request):
     """View function for the home page of the site."""
 
     num_dealers = Dealer.objects.count()
-    num_cars = ModelCar.objects.count()
+    num_cars = Car.objects.count()
     num_manufacturers = Manufacturer.objects.count()
     num_cities = City.objects.count()
 
@@ -49,18 +49,19 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = Manufacturer.objects.all()
-        form = ManufacturerSearchForm(self, request.GET)
+        form = ManufacturerSearchForm(self.request.GET)
         if form.is_valid():
             name_query = form.cleaned_data.get("name")
             if name_query:
-                queryset = queryset.filter(name_icontains=name_query)
-            return queryset
+                queryset = queryset.filter(
+                    name_icontains=name_query)
+        return queryset
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
     fields = "__all__"
-    success_url = reverse_lazy("taxi:manufacturer-list")
+    success_url = reverse_lazy("dealer_purchase:manufacturer-list")
 
 
 class ManufacturerUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -74,22 +75,22 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:manufacturer-list")
 
 
-class ModelCarListView(LoginRequiredMixin, generic.ListView):
-    model = ModelCar
+class CarListView(LoginRequiredMixin, generic.ListView):
+    model = Car
     paginate_by = 5
-    queryset = ModelCar.objects.select_related("manufacturer")
+    queryset = Car.objects.select_related("manufacturer")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         model = self.request.GET.get("model", "")
-        context["search_form"] = ModelCarSearchForm(
+        context["search_form"] = CarSearchForm(
             initial={"model": model}
         )
         return context
 
     def get_queryset(self):
-        queryset = ModelCar.objects.select_related("manufacturer")
-        form = ModelCarSearchForm(self.request.GET)
+        queryset = Car.objects.select_related("manufacturer")
+        form = CarSearchForm(self.request.GET)
         if form.is_valid():
             model_query = form.cleaned_data.get("model")
             if model_query:
@@ -97,24 +98,24 @@ class ModelCarListView(LoginRequiredMixin, generic.ListView):
         return queryset
 
 
-class ModelCarDetailView(LoginRequiredMixin, generic.DetailView):
-    model = ModelCar
+class CarDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Car
 
 
-class ModelCarCreateView(LoginRequiredMixin, generic.CreateView):
-    model = ModelCar
-    form_class = ModelCarForm
+class CarCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Car
+    form_class = CarForm
     success_url = reverse_lazy("dealer:car-list")
 
 
-class ModelCarUpdateView(LoginRequiredMixin, generic.UpdateView):
-    model = ModelCar
-    form_class = ModelCarForm
+class CarUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Car
+    form_class = CarForm
     success_url = reverse_lazy("dealer:car-list")
 
 
-class ModelCarDeleteView(LoginRequiredMixin, generic.DeleteView):
-    model = ModelCar
+class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Car
     success_url = reverse_lazy("dealer:car-list")
 
 
@@ -162,11 +163,52 @@ class DealerDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("")
 
 
+class CityListView(LoginRequiredMixin, generic.ListView):
+    model = City
+    context_object_name = "city_list"
+    template_name = "dealer/city_list.html"
+    paginate_by = 5
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CityListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = CitySearchForm(
+            initial={"name": name}
+        )
+        return context
+
+    def get_queryset(self):
+        queryset = City.objects.all()
+        form = CitySearchForm(self, request.Get)
+        if form.is_valid():
+            name_query = form.cleaned_data
+            if name_query:
+                queryset = queryset.filter(name_icontains=name_query)
+            return queryset
+
+
+class CityCreateView(LoginRequiredMixin, generic.CreateView):
+    model = City
+    fields = "__all__"
+    success_url = reverse_lazy("dealer_purchase:city-list")
+
+
+class CityUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = City
+    fields = "__all__"
+    success_url = reverse_lazy("dealer_purchase:city-list")
+
+
+class CityDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = City
+    success_url = reverse_lazy("dealer_purchase:manufacturer-list")
+
+
 @login_required
 def toggle_assign_to_car(request, pk):
     dealer = Dealer.objects.get(id=request.user.id)
     if (
-        ModelCar.objects.get(id=pk) in dealer.cars.all()
+        Car.objects.get(id=pk) in dealer.cars.all()
     ):
         dealer.cars.remove(pk)
     else:

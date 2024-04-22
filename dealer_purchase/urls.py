@@ -7,16 +7,12 @@ from .views import (
     ManufacturerCreateView,
     ManufacturerUpdateView,
     ManufacturerDeleteView,
-    ModelCarListView,
-    ModelCarDetailView,
-    ModelCarCreateView,
-    ModelCarUpdateView,
-    ModelCarDeleteView,
     DealerListView,
     DealerDetailView,
     DealerCreateView,
     DealerLicenseUpdateView,
-    DealerDeleteView,
+    DealerDeleteView, CityListView, CityCreateView, CityUpdateView, CityDeleteView, CarListView, CarDetailView,
+    CarCreateView, CarUpdateView, CarDeleteView,
 )
 
 urlpatterns = [
@@ -41,25 +37,25 @@ urlpatterns = [
         ManufacturerDeleteView.as_view(),
         name="manufacturer-delete",
     ),
-    path("cars/", ModelCarListView.as_view(), name="car-list"),
-    path("cars/<int:pk>/", ModelCarDetailView.as_view(), name="car-detail"),
-    path("cars/create/", ModelCarCreateView.as_view(), name="car-create"),
-    path("cars/<int:pk>/update/", ModelCarUpdateView.as_view(), name="car-update"),
-    path("cars/<int:pk>/delete/", ModelCarDeleteView.as_view(), name="car-delete"),
+    path("cars/", CarListView.as_view(), name="car-list"),
+    path("cars/<int:pk>/", CarDetailView.as_view(), name="car-detail"),
+    path("cars/create/", CarCreateView.as_view(), name="car-create"),
+    path("cars/<int:pk>/update/", CarUpdateView.as_view(), name="car-update"),
+    path("cars/<int:pk>/delete/", CarDeleteView.as_view(), name="car-delete"),
     path(
         "cars/<int:pk>/toggle-assign/",
         toggle_assign_to_car,
         name="toggle-car-assign",
     ),
-    path("dealers/", DealerListView.as_view(), name="driver-list"),
+    path("dealers/", DealerListView.as_view(), name="dealer-list"),
     path(
-        "dealers/<int:pk>/", DealerDetailView.as_view(), name="driver-detail"
+        "dealers/<int:pk>/", DealerDetailView.as_view(), name="dealer-detail"
     ),
-    path("dealers/", DealerListView.as_view(), name="driver-list"),
+    path("dealers/", DealerListView.as_view(), name="dealer-list"),
     path(
-        "dealers/<int:pk>/", DealerDetailView.as_view(), name="driver-detail"
+        "dealers/<int:pk>/", DealerDetailView.as_view(), name="dealer-detail"
     ),
-    path("dealers/create/", DealerCreateView.as_view(), name="driver-create"),
+    path("dealers/create/", DealerCreateView.as_view(), name="dealer-create"),
     path(
         "dealers/<int:pk>/update/",
         DealerLicenseUpdateView.as_view(),
@@ -69,6 +65,16 @@ urlpatterns = [
         "dealer/<int:pk>/delete/",
         DealerDeleteView.as_view(),
         name="dealer-delete",
+    ),
+
+    path("cities/", CityListView.as_view(), name="city-list"),
+    path("cities/create/", CityCreateView.as_view(), name="city-create"),
+    path("cities/<int:pk>/update/", CityUpdateView.as_view(), name="city-update"),
+    path("cities/<int:pk>/delete/", CityDeleteView.as_view(), name="city-delete"),
+    path(
+        "cities/<int:pk>/toggle-assign/",
+        toggle_assign_to_car,
+        name="toggle-car-assign",
     ),
 ]
 

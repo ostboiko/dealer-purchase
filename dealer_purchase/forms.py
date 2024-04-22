@@ -3,17 +3,17 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
-from dealer_purchase.models import ModelCar, Dealer
+from dealer_purchase.models import Dealer, Car
 
 
-class ModelCarForm(forms.ModelForm):
+class CarForm(forms.ModelForm):
     drivers = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
         widget=forms.CheckboxSelectMultiple,
     )
 
     class Meta:
-        model = ModelCar
+        model = Car
         fields = "__all__"
 
 
@@ -65,9 +65,13 @@ class DealerSearchForm(SearchForm):
     pass
 
 
-class ModelCarSearchForm(SearchForm):
+class CarSearchForm(SearchForm):
     pass
 
 
 class ManufacturerSearchForm(SearchForm):
+    pass
+
+
+class CitySearchForm(SearchForm):
     pass
