@@ -76,6 +76,7 @@ class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class CarListView(LoginRequiredMixin, generic.ListView):
+    template_name = 'dealer/car_list.html'
     model = Car
     paginate_by = 5
     queryset = Car.objects.select_related("manufacturer")
@@ -120,6 +121,7 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class DealerListView(LoginRequiredMixin, generic.ListView):
+    template_name = 'dealer/dealer_list.html'
     model = Dealer
     paginate_by = 5
 
@@ -179,11 +181,11 @@ class CityListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = City.objects.all()
-        form = CitySearchForm(self, request.Get)
+        form = CitySearchForm(self.request.GET)
         if form.is_valid():
-            name_query = form.cleaned_data
+            name_query = form.cleaned_data["query"]
             if name_query:
-                queryset = queryset.filter(name_icontains=name_query)
+                queryset = queryset.filter(city__icontains=name_query)
             return queryset
 
 
