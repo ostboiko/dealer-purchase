@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import request, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
+from django.views.generic import DetailView
 
 from dealer_purchase.forms import ManufacturerSearchForm, CarSearchForm, CarForm, DealerSearchForm, \
     DealerCreationForm, DealerLicenseUpdateForm, CitySearchForm, CarForm
@@ -54,25 +55,25 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
             name_query = form.cleaned_data.get("name")
             if name_query:
                 queryset = queryset.filter(
-                    name_icontains=name_query)
+                    name__icontains=name_query)
         return queryset
 
 
 class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
     fields = "__all__"
-    success_url = reverse_lazy("dealer_purchase:manufacturer-list")
+    success_url = reverse_lazy("dealer:manufacturer-list")
 
 
 class ManufacturerUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Manufacturer
     fields = "__all__"
-    success_url = reverse_lazy("taxi:manufacturer-list")
+    success_url = reverse_lazy("dealer:manufacturer-list")
 
 
 class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Manufacturer
-    success_url = reverse_lazy("taxi:manufacturer-list")
+    success_url = reverse_lazy("dealer:manufacturer-list")
 
 
 class CarListView(LoginRequiredMixin, generic.ListView):
@@ -187,6 +188,12 @@ class CityListView(LoginRequiredMixin, generic.ListView):
             if name_query:
                 queryset = queryset.filter(city__icontains=name_query)
             return queryset
+
+
+class CityDetailView(DetailView):
+    model = City
+    template_name = 'dealer/city_detail.html'
+    context_object_name = 'city'
 
 
 class CityCreateView(LoginRequiredMixin, generic.CreateView):

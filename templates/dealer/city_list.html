@@ -14,8 +14,8 @@
     <ul>
       {% for city in city_list %}
         <li>
-          <a href="{% url "dealer:city-detail" pk=city.id %} ">{{ city.id }}</a>
-          {{ city.model }} ({{ city.manufacturer.name }})
+          <a href="{% url "dealer:city-detail" pk=city.id %}">{{ city.id }}</a>
+          {{ city.city }}
         </li>
       {% endfor %}
     </ul>
