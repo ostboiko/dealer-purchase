@@ -2,12 +2,12 @@
 
 {% block content %}
   <h1>
-    Username: {{ driver.username }}
-    <a href="{% url 'dealer_purchase:driver-delete' pk=driver.id %}" class="btn btn-danger link-to-page">
+    Username: {{ dealer.username }}
+    <a href="{% url 'dealer:dealer-delete' pk=dealer.id %}" class="btn btn-danger link-to-page">
       Delete
     </a>
 
-    <a href="{% url 'dealer_purchase:driver-update' pk=driver.id %}" class="btn btn-secondary link-to-page">
+    <a href="{% url 'dealer:dealer-update' pk=dealer.id %}" class="btn btn-secondary link-to-page">
       Update license number
     </a>
   </h1>
@@ -22,9 +22,9 @@
 
     {% for car in dealer.cars.all %}
         <hr>
-        <p><strong>Model:</strong> {{ model-car.model }}</p>
+        <p><strong>Model:</strong> {{ car.car }}</p>
         <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{model-car.id}}</p>
+        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
 
     {% empty %}
       <p>No cars!</p>

@@ -24,6 +24,7 @@ class DealerCreationForm(UserCreationForm):
             "license_number",
             "first_name",
             "last_name",
+            "name",
         )
 
     def clean_license_number(self):
@@ -36,7 +37,7 @@ class DealerLicenseUpdateForm(forms.ModelForm):
         fields = ["license_number"]
 
     def clean_license_number(self):
-        return validate_license_number(self.cleaned_data["license_number"])
+        return validate_license_number(self.cleaned_data["license_number", "name"])
 
 
 def validate_license_number(

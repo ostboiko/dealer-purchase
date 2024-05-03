@@ -1,14 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import DetailView
 
 from dealer_purchase.forms import ManufacturerSearchForm, CarSearchForm, CarForm, DealerSearchForm, \
     DealerCreationForm, DealerLicenseUpdateForm, CitySearchForm, CarForm
-from dealer_purchase.models import Dealer, Car, Manufacturer, City, Car
+from dealer_purchase.models import Dealer, Manufacturer, City, Car
 
 
 @login_required
@@ -63,17 +63,20 @@ class ManufacturerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Manufacturer
     fields = "__all__"
     success_url = reverse_lazy("dealer:manufacturer-list")
+    template_name = 'dealer/manufacturer_form.html'
 
 
 class ManufacturerUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Manufacturer
     fields = "__all__"
     success_url = reverse_lazy("dealer:manufacturer-list")
+    template_name = 'dealer/dealer_form.html'
 
 
 class ManufacturerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Manufacturer
     success_url = reverse_lazy("dealer:manufacturer-list")
+    template_name = 'dealer/manufacturer_confrim_delete.html'
 
 
 class CarListView(LoginRequiredMixin, generic.ListView):
@@ -102,23 +105,27 @@ class CarListView(LoginRequiredMixin, generic.ListView):
 
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
     model = Car
+    template_name = 'dealer/car_detail.html'
 
 
 class CarCreateView(LoginRequiredMixin, generic.CreateView):
     model = Car
     form_class = CarForm
     success_url = reverse_lazy("dealer:car-list")
+    template_name = 'dealer/car_form.html'
 
 
 class CarUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Car
     form_class = CarForm
     success_url = reverse_lazy("dealer:car-list")
+    template_name = 'dealer/dealer_form.html'
 
 
 class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Car
     success_url = reverse_lazy("dealer:car-list")
+    template_name = 'dealer/dealer_confrim_delete.html'
 
 
 class DealerListView(LoginRequiredMixin, generic.ListView):
@@ -147,23 +154,27 @@ class DealerListView(LoginRequiredMixin, generic.ListView):
 
 class DealerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Dealer
-    queryset = Dealer.objects.all().prefetch_related("cars__manufacturer")
+    queryset = Dealer.objects.all()
+    template_name = 'dealer/dealer_detail.html'
 
 
 class DealerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Dealer
     form_class = DealerCreationForm
+    template_name = 'dealer/dealer_form.html'
 
 
 class DealerLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Dealer
     form_class = DealerLicenseUpdateForm
-    success_url = reverse_lazy("dealer:driver-list")
+    success_url = reverse_lazy("dealer:dealer-list")
+    template_name = 'dealer/dealer_form.html'
 
 
 class DealerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Dealer
-    success_url = reverse_lazy("")
+    success_url = reverse_lazy("dealer:dealer-list")
+    template_name = 'dealer/dealer_confrim_delete.html'
 
 
 class CityListView(LoginRequiredMixin, generic.ListView):
@@ -199,18 +210,20 @@ class CityDetailView(DetailView):
 class CityCreateView(LoginRequiredMixin, generic.CreateView):
     model = City
     fields = "__all__"
-    success_url = reverse_lazy("dealer_purchase:city-list")
+    success_url = reverse_lazy("dealer:city-list")
+    template_name = 'dealer/city_form.html'
 
 
 class CityUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = City
     fields = "__all__"
-    success_url = reverse_lazy("dealer_purchase:city-list")
+    success_url = reverse_lazy("dealer:city-list")
 
 
 class CityDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = City
-    success_url = reverse_lazy("dealer_purchase:manufacturer-list")
+    success_url = reverse_lazy("dealer:manufacturer-list")
+    template_name = 'dealer/city_confrim_delete.html'
 
 
 @login_required

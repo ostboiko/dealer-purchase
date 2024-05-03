@@ -3,29 +3,28 @@
 {% block content %}
   <h1>
     {{ car.model }}
-    <a href="{% url 'dealer_purchase:car-delete' pk=car.id %}" class="btn btn-danger link-to-page">
+    <a href="{% url 'dealer:car-delete' pk=car.id %}" class="btn btn-danger link-to-page">
       Delete
     </a>
 
-    <a href="{% url 'dealer_purchase:car-update' pk=car.id %}" class="btn btn-secondary link-to-page">
+    <a href="{% url 'dealer:car-update' pk=car.id %}" class="btn btn-secondary link-to-page">
       Update
     </a>
   </h1>
-  <p>Manufacturer: ({{ car.manufacturer.name }}, {{ car.manufacturer.country }})</p>
   <h1>
-    Drivers
-
+    Manufacturer Detail:
     {% if car in user.cars.all %}
-      <a href="{% url 'dealer_purchase:toggle-car-assign' pk=car.id %}" class="btn btn-danger link-to-page">
+      <a href="{% url 'dealer:toggle-car-assign' pk=car.id %}" class="btn btn-danger link-to-page">
         Delete me from this car
       </a>
     {% else %}
-      <a href="{% url 'dealer_purchase:toggle-car-assign' pk=car.id %}" class="btn btn-success link-to-page">
-        Assign me from this car
+      <a href="{% url 'dealer:toggle-car-assign' pk=car.id %}" class="btn btn-success link-to-page">
+        Assign
       </a>
     {% endif %}
-
   </h1>
+  <p>Name Car: ({{ car.manufacturer.name }})</p>
+  <p>Manufacturer Country: ({{ car.manufacturer.country }})</p>
   <hr>
   <ul>
     {% for driver in car.drivers.all %}
