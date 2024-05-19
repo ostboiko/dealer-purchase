@@ -1,24 +1,130 @@
-{% extends "base.html" %}
-{% load crispy_forms_filters %}
+{% extends 'layouts/base-fullscreen.html' %}
+
+{% block title %} Sign IN {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+  body.sign-in-illustration {
+    background-color: #121212;
+    color: #ffffff;
+  }
+
+  .card.card-plain {
+    background-color: #1e1e1e;
+    border: none;
+  }
+
+  .card-header h4,
+  .card-footer a {
+    color: #ffffff;
+  }
+
+  .form-check-label {
+    color: #ffffff;
+  }
+
+  .btn.bg-gradient-primary {
+    background-color: #3a3a3a;
+    color: #ffffff;
+    border: none;
+  }
+
+  .btn.bg-gradient-primary:hover {
+    background-color: #5a5a5a;
+  }
+
+  .text-primary.text-gradient {
+    color: #bb86fc;
+  }
+
+  .bg-gradient-primary {
+    background-color: #1e1e1e !important;
+  }
+
+  .page-header.section-height-100 {
+    height: 100vh;
+  }
+
+  /* Center login block */
+  .login-block {
+    margin: 0 auto;
+    max-width: 400px;
+  }
+
+  /* White Sign In Button */
+  .btn.bg-gradient-primary {
+    background-color: #ffffff;
+    color: #3a3a3a;
+  }
+
+  .btn.bg-gradient-primary:hover {
+    background-color: #f0f0f0;
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block body_class %} sign-in-illustration {% endblock body_class %}
 
 {% block content %}
 
-{% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+  {% include "includes/navigation-auth.html" %}
 
-<h1>Login</h1>
+  <section>
+    <div class="page-header section-height-100">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto login-block">
+            <div class="card card-plain">
+              <div class="card-header pb-0 text-left">
+                <h4 class="font-weight-bolder">Sign In</h4>
+                <p class="mb-0">
+                  {% if msg %}
+                      {{ msg | safe }}
+                  {% else %}
+                      Add your credentials
+                  {% endif %}
+                </p>
+              </div>
+              <div class="card-body">
 
-{% if next %}
-  <p>Please login to see this page.</p>
-{% endif %}
+                <form method="post" action="" role="form">
 
-<form method="post" action="{% url 'login' %}">
-  {% csrf_token %}
-  {{ form|crispy }}
+                  {% csrf_token %}
 
-  <input type="submit" value="Login" class="btn btn-primary" />
-  <input type="hidden" name="next" value="{{ next }}" />
-</form>
+                  <div class="mb-3">
+                    {{ form.username }}
+                  </div>
+                  <div class="mb-3">
+                    {{ form.password }}
+                  </div>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                  </div>
+                  <div class="text-center">
+                    <button type="submit" name="login"
+                            class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Sign in</button>
+                  </div>
+                </form>
+              </div>
+              <div class="card-footer text-center pt-0 px-lg-2 px-1">
+                <p class="mb-4 text-sm mx-auto">
+                  Don't have an account?
+                  <a href="{% url 'register' %}" class="text-primary text-gradient font-weight-bold">Sign UP</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-{% endblock %}
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}
+
+
+{% endblock javascripts %}

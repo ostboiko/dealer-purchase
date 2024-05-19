@@ -1,9 +1,12 @@
+from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseNotAllowed
+from django.shortcuts import render, get_object_or_404, redirect
+from django.template.context_processors import request
 from django.urls import reverse_lazy
-from django.views import generic
+from django.views import generic, View
 from django.views.generic import DetailView
 
 from dealer_purchase.forms import ManufacturerSearchForm, CarSearchForm, CarForm, DealerSearchForm, \
@@ -224,6 +227,27 @@ class CityDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = City
     success_url = reverse_lazy("dealer:manufacturer-list")
     template_name = 'dealer/city_confrim_delete.html'
+
+
+class LogoutView(View):
+    def post(self, request):
+        logout(request)
+        return redirect('home')
+
+    def get(self, request):
+        # Redirect any GET requests to home page or handle them as needed
+        return HttpResponseNotAllowed(['POST'])
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('some_view_name')  # Замініть на вашу цільову сторінку після реєстрації
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/login.html', {'form': form})
 
 
 @login_required
