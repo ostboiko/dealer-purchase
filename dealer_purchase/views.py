@@ -2,9 +2,8 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseNotAllowed
+from django.http import HttpResponseRedirect,  HttpResponseNotAllowed
 from django.shortcuts import render, get_object_or_404, redirect
-from django.template.context_processors import request
 from django.urls import reverse_lazy
 from django.views import generic, View
 from django.views.generic import DetailView
@@ -250,13 +249,14 @@ def register(request):
     return render(request, 'registration/login.html', {'form': form})
 
 
-@login_required
-def toggle_assign_to_car(request, pk):
-    dealer = Dealer.objects.get(id=request.user.id)
-    if (
-        Car.objects.get(id=pk) in dealer.cars.all()
-    ):
-        dealer.cars.remove(pk)
-    else:
-        dealer.cars.add(pk)
-    return HttpResponseRedirect(reverse_lazy("dealer:car-detail", args=[pk]))
+class ToggleAssignToCarView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        dealer = get_object_or_404(Dealer, id=request.user.id)
+        car = get_object_or_404(Car, id=pk)
+
+        if car in dealer.cars.all():
+            dealer.cars.remove(car)
+        else:
+            dealer.cars.add(car)
+
+        return HttpResponseRedirect(reverse_lazy("dealer:car-detail", args=[pk]))

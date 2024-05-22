@@ -2,7 +2,6 @@ from django.urls import path
 
 from .views import (
     index,
-    toggle_assign_to_car,
     ManufacturerListView,
     ManufacturerCreateView,
     ManufacturerUpdateView,
@@ -11,8 +10,18 @@ from .views import (
     DealerDetailView,
     DealerCreateView,
     DealerLicenseUpdateView,
-    DealerDeleteView, CityListView, CityCreateView, CityUpdateView, CityDeleteView, CarListView, CarDetailView,
-    CarCreateView, CarUpdateView, CarDeleteView, CityDetailView,
+    DealerDeleteView,
+    CityListView,
+    CityCreateView,
+    CityUpdateView,
+    CityDeleteView,
+    CarListView,
+    CarDetailView,
+    CarCreateView,
+    CarUpdateView,
+    CarDeleteView,
+    CityDetailView,
+    ToggleAssignToCarView,
 )
 
 urlpatterns = [
@@ -43,13 +52,9 @@ urlpatterns = [
     path("cars/<int:pk>/update/", CarUpdateView.as_view(), name="car-update"),
     path("cars/<int:pk>/delete/", CarDeleteView.as_view(), name="car-delete"),
     path(
-        "cars/<int:pk>/toggle-assign/",
-        toggle_assign_to_car,
+        "cars/<int:pk>/toggle_assign_to_car_View/",
+        ToggleAssignToCarView.as_view(),
         name="toggle-car-assign",
-    ),
-    path("dealers/", DealerListView.as_view(), name="dealer-list"),
-    path(
-        "dealers/<int:pk>/", DealerDetailView.as_view(), name="dealer-detail"
     ),
     path("dealers/", DealerListView.as_view(), name="dealer-list"),
     path(
@@ -62,19 +67,18 @@ urlpatterns = [
         name="dealer-update",
     ),
     path(
-        "dealer/<int:pk>/delete/",
+        "dealers/<int:pk>/delete/",
         DealerDeleteView.as_view(),
         name="dealer-delete",
     ),
-
     path("cities/", CityListView.as_view(), name="city-list"),
-    path('cities/<int:pk>/',CityDetailView.as_view(), name='city-detail'),
+    path("cities/<int:pk>/", CityDetailView.as_view(), name="city-detail"),
     path("cities/create/", CityCreateView.as_view(), name="city-create"),
     path("cities/<int:pk>/update/", CityUpdateView.as_view(), name="city-update"),
     path("cities/<int:pk>/delete/", CityDeleteView.as_view(), name="city-delete"),
     path(
         "cities/<int:pk>/toggle-assign/",
-        toggle_assign_to_car,
+        ToggleAssignToCarView.as_view(),
         name="toggle-car-assign",
     ),
 ]
