@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect,  HttpResponseNotAllowed
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic, View
-from django.views.generic import DetailView
+from django.views.generic import DetailView, FormView
 
 from dealer_purchase.forms import ManufacturerSearchForm, CarSearchForm, CarForm, DealerSearchForm, \
     DealerCreationForm, DealerLicenseUpdateForm, CitySearchForm, CarForm
@@ -237,17 +237,16 @@ class LogoutView(View):
         # Redirect any GET requests to home page or handle them as needed
         return HttpResponseNotAllowed(['POST'])
 
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('some_view_name')  # Замініть на вашу цільову сторінку після реєстрації
-    else:
-        form = UserCreationForm()
-    return render(request, 'registration/login.html', {'form': form})
 
+class RegisterView(FormView):
+    template_name = 'registration/login.html'
+    form_class = UserCreationForm
+    success_url = reverse_lazy('some_view_name')  # Замініть на вашу цільову сторінку після реєстрації
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return super().form_valid(form)
 
 class ToggleAssignToCarView(LoginRequiredMixin, View):
     def post(self, request, pk):
