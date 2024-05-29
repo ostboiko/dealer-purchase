@@ -120,6 +120,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 SECRET_KEY = config('SECRET_KEY')
 
 # Static files (CSS, JavaScript, Images)
