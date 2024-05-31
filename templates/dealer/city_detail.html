@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    City detail
+    <a href="{% url 'dealer:city-delete' pk=city.id %}" class="btn btn-danger link-to-page">
+      Delete
+    </a>
+  </h1>
+  <p>City: {{ city.city }}</p>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Username: {{ dealer.username }}
+    <a href="{% url 'dealer:dealer-delete' pk=dealer.id %}" class="btn btn-danger link-to-page">
+      Delete
+    </a>
+
+    <a href="{% url 'dealer:dealer-update' pk=dealer.id %}" class="btn btn-secondary link-to-page">
+      Update license number
+    </a>
+  </h1>
+
+  <p><strong>First name:</strong> {{ dealer.first_name }}</p>
+  <p><strong>Last name:</strong> {{ dealer.last_name }}</p>
+  <p><strong>License number:</strong> {{ dealer.license_number }}</p>
+  <p><strong>Is staff:</strong> {{ dealer.is_staff }}</p>
+
+  <div class="ml-3">
+    <h4>Cars</h4>
+
+    {% for car in dealer.cars.all %}
+        <hr>
+        <p><strong>Model:</strong> {{ car.car }}</p>
+        <p><strong>Manufacturer:</strong> {{ car.manufacturer.name }}</p>
+        <p class="text-muted"><strong>Id:</strong> {{car.id}}</p>
+
+    {% empty %}
+      <p>No cars!</p>
+    {% endfor %}
+  </div>
+{% endblock %}
