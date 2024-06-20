@@ -25,3 +25,7 @@ python manage-py runserver # starts Django Server
 * Authentication functionality for Dealer
 * Hanaging books dealers & cars directly from website interface
 * Powerful adnin panel for advanced nanaging
+
+if you want to enter the login page, please use these data
+login: user
+password: user12345
