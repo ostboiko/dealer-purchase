@@ -27,5 +27,7 @@ python manage-py runserver # starts Django Server
 * Powerful adnin panel for advanced nanaging
 
 if you want to enter the login page, please use these data
-login: user
+
+login: tets_user2
+
 password: user12345
