@@ -14,8 +14,7 @@ First, we have to start up Django's development server.
 Python3 must be already installed
 
 ## shell
-git
-clone https://github.con/klmnok/Library-mate
+git clone https://github.com/ostboiko/dealer-purchase
 cd library-mate pythons
 -n venv venv
 source venv/bin/activate pip install -r requirements.txt
