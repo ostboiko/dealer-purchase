@@ -15,8 +15,8 @@ Python3 must be already installed
 
 ## shell
 git clone https://github.com/ostboiko/dealer-purchase
-cd library-mate pythons
--n venv venv
+-cd dealer-purchase
+-python -m venv venv
 source venv/bin/activate pip install -r requirements.txt
 python manage-py runserver # starts Django Server
 
