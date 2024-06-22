@@ -1,8 +1,8 @@
 # dealer-purchase (https://dealer-purchase.onrender.com/)
 
 ## Requirements
--Python 3.6
--Django 3.1
+-Python 3.11
+-Django 5.0.3
 
 
 Welcome to your first project where you can create a dealer, a car, a factory and a city.
